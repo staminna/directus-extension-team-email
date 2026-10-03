@@ -13,6 +13,31 @@ backed by your own SMTP server rather than a third-party mailbox.
 - **Per-user sender addresses** through an alias table, so people send as
   themselves rather than as one shared account.
 
+## Screenshots
+
+All names, addresses and messages below are fictitious demo data.
+
+**Inbox** — received mail for the signed-in user, unread marked with a dot.
+
+![Inbox](docs/screenshots/inbox.png)
+
+**Sent** — messages sent by the signed-in user, internal and external.
+
+![Sent](docs/screenshots/sent.png)
+
+**Conversation** — received and sent messages merged into one thread.
+
+![Conversation](docs/screenshots/thread.png)
+
+**Compose** — internal messages to Directus users, or external mail over SMTP.
+
+![Compose](docs/screenshots/compose.png)
+
+**My mailbox (IMAP)** — per-user mailbox settings; the password is stored
+encrypted and never shown again.
+
+![My mailbox (IMAP)](docs/screenshots/mailbox.png)
+
 ## Before you install: this is not a sandboxed extension
 
 The Directus Marketplace installs all App extensions, but only **sandboxed** API
@@ -51,7 +76,31 @@ The extension stores mail in six collections: `emails` (outbox), `inbox_email`
 (received), `email_aliases` (who sends and receives as what), `email_templates`,
 and the attachment junctions `emails_files` and `inbox_email_files`.
 
-### On an existing Directus project
+### Automatic install over the API (any database)
+
+`schema/schema.json` holds only this extension's collections, fields and
+relations (the IMAP mailbox table included). The bundled script reads it and
+creates whatever is missing through the Directus API. It never updates or
+deletes anything, `--dry-run` shows the plan first, and it is safe to re-run.
+It needs an admin token:
+
+```bash
+cd ./node_modules/@staminna/directus-extension-team-email
+DIRECTUS_URL=https://cms.example.com DIRECTUS_TOKEN=<admin token> \
+  node scripts/install-schema.mjs --dry-run
+DIRECTUS_URL=https://cms.example.com DIRECTUS_TOKEN=<admin token> \
+  node scripts/install-schema.mjs
+```
+
+No restart is needed. The API cannot create CHECK constraints or plain indexes,
+so this route leaves out three value checks and one sync index. The extension
+works without them; on PostgreSQL, `install.sql` below adds them.
+
+> Do not pass `schema.json` to `directus schema apply` or `POST /schema/apply`
+> on an existing project. Like any snapshot, everything missing from it would be
+> deleted.
+
+### On an existing Directus project (PostgreSQL)
 
 Run the additive installer. It only creates things, never drops them, and it is
 safe to re-run:
