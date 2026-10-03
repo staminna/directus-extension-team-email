@@ -303,7 +303,7 @@ export default defineEndpoint({
             const matched: Array<{ id: string; email: string; first_name: string | null; last_name: string | null }> =
                 await database('directus_users')
                     .select('id', 'email', 'first_name', 'last_name')
-                    .whereIn(database.raw('lower(??)', ['email']), addresses)
+                    .whereIn(database.raw('lower(??)', ['email']) as any, addresses)
                     .andWhere('status', 'active');
 
             if (matched.length === 0) return [];

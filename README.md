@@ -1,5 +1,10 @@
 # Team Email
 
+[![CI](https://github.com/staminna/directus-extension-team-email/actions/workflows/ci.yml/badge.svg)](https://github.com/staminna/directus-extension-team-email/actions/workflows/ci.yml)
+[![Coverage](https://codecov.io/gh/staminna/directus-extension-team-email/branch/main/graph/badge.svg)](https://codecov.io/gh/staminna/directus-extension-team-email)
+[![npm](https://img.shields.io/npm/v/@staminna/directus-extension-team-email)](https://www.npmjs.com/package/@staminna/directus-extension-team-email)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Send, receive and thread email inside Directus. Every user gets their own inbox,
 backed by your own SMTP server rather than a third-party mailbox.
 
@@ -241,6 +246,19 @@ API takes base64 only, so a file is read into memory for that path.
   is a copy of your mail, not a two-way sync.
 - Recipient matching is by address. Someone who was Bcc'd, with no alias row for
   the envelope recipient, cannot be resolved.
+
+## Development
+
+```bash
+npm install
+npm test            # run the test suite (Vitest)
+npm run coverage    # tests + coverage report (fails below 95% lines)
+npm run typecheck
+npm run build
+```
+
+CI runs typecheck, tests with coverage, build and `directus-extension validate`
+on Node 22 and 24 for every push and pull request to `main`.
 
 ## License
 

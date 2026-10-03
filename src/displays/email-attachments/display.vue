@@ -36,6 +36,7 @@ const files = ref<AttachmentRow[]>([]);
 
 async function load() {
     if (loaded.value || loading.value || messageId.value == null) return;
+    error.value = null;
     loading.value = true;
     const r = await loadAttachments(api, messageId.value, kind.value);
     loading.value = false;
